@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     strategy:
       matrix:
@@ -29,3 +29,17 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    
+    
+  health_check:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: testing
+      url: https://github.com
+
+    steps:
+      - run: echo ${{ secrets.DONUT }}
+      - uses: jtalk/url-health-check-action@v2
+        with:
+          url: https://github.com
